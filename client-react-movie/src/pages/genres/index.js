@@ -1,9 +1,10 @@
 import React from 'react'
+import GenreList from '../../components/GenreList'
 
 const index = () => {
   return (
     <>
-      <h1>Genres page</h1>
+      <GenreList />
     </>
   )
 }

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 
-const MovieList = () => {
+const List = () => {
   const [movies, setMovies] = useState([])
 
   /* 
-  useEffect ini akan bekerja ketika component "MovieList" dipanggil, dengan cttn tidak ada parameter pada param kedua
+  useEffect ini akan bekerja ketika component "List" dipanggil, dengan cttn tidak ada parameter pada param kedua
   dari useEffect ini 
   */
   useEffect(() => {
@@ -26,9 +27,12 @@ const MovieList = () => {
               <p className="card-text">
                 With supporting text below as a natural lead-in to additional content.
               </p>
-              <a href="#" className="btn btn-primary">
+              {/* <a href="#" className="btn btn-primary">
                 Go somewhere
-              </a>
+              </a> */}
+              <Link to={`/movies/${movie.id}`} className="btn btn-primary">
+                Detail
+              </Link>
             </div>
           </div>
         </div>
@@ -37,4 +41,4 @@ const MovieList = () => {
   )
 }
 
-export default MovieList
+export default List

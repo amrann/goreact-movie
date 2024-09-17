@@ -8,6 +8,7 @@ import Home from './pages/home';
 import Movies from './pages/movies';
 import Genres from './pages/genres';
 import Admin from './pages/admin';
+import ShowMovie from './pages/movies/show';
 
 function App() {
   return (
@@ -24,7 +25,9 @@ function App() {
           <div className='col-sm-10'>
             <Routes>
               <Route path='/' element={<Home />} />
-              <Route path='/movies' element={<Movies />} />
+              {/* Penggunaan attribut 'exact' dapat memastikan link yang diakses tidak tertukar dengan /movies */}
+              <Route exact path='/movies/:thisId' element={<ShowMovie />} />
+              <Route path='/movies/' element={<Movies />} />
               <Route path='/genres' element={<Genres />} />
               <Route path='/admin' element={<Admin />} />
             </Routes>

@@ -2,9 +2,7 @@ package main
 
 import (
 	"net/http"
-	"server-go-movie/models"
 	"strconv"
-	"time"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -22,18 +20,20 @@ func (app *application) getOneMovie(rw http.ResponseWriter, r *http.Request) {
 
 	// app.logger.Println("the id is : ", id)
 
-	movie := models.Movie{
-		ID:          id,
-		Title:       "Some movie title",
-		Description: "Some movie description",
-		Year:        2024,
-		ReleaseDate: time.Date(1990, 01, 01, 01, 0, 0, 0, time.Local),
-		Runtime:     112,
-		Rating:      5,
-		MPAARating:  "PG-13",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
+	// movie := models.Movie{
+	// 	ID:          id,
+	// 	Title:       "Some movie title",
+	// 	Description: "Some movie description",
+	// 	Year:        2024,
+	// 	ReleaseDate: time.Date(1990, 01, 01, 01, 0, 0, 0, time.Local),
+	// 	Runtime:     112,
+	// 	Rating:      5,
+	// 	MPAARating:  "PG-13",
+	// 	CreatedAt:   time.Now(),
+	// 	UpdatedAt:   time.Now(),
+	// }
+
+	movie, err := app.models.DB.GET(id)
 
 	err = app.writeJSON(rw, http.StatusOK, movie, "movie")
 

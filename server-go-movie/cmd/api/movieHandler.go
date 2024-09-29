@@ -14,7 +14,7 @@ func (app *application) getOneMovie(rw http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		// app.logger.Print(errors.New("invalid id parameter"))
-		app.errorJson(rw, err)
+		app.errorJSON(rw, err)
 		return
 	}
 
@@ -37,7 +37,7 @@ func (app *application) getOneMovie(rw http.ResponseWriter, r *http.Request) {
 
 	err = app.writeJSON(rw, http.StatusOK, movie, "movie")
 	if err != nil {
-		app.errorJson(rw, err)
+		app.errorJSON(rw, err)
 		return
 	}
 }
@@ -45,13 +45,27 @@ func (app *application) getOneMovie(rw http.ResponseWriter, r *http.Request) {
 func (app *application) getAllMovies(rw http.ResponseWriter, r *http.Request) {
 	movies, err := app.models.DB.All()
 	if err != nil {
-		app.errorJson(rw, err)
+		app.errorJSON(rw, err)
 		return
 	}
 
 	err = app.writeJSON(rw, http.StatusOK, movies, "movies")
 	if err != nil {
-		app.errorJson(rw, err)
+		app.errorJSON(rw, err)
+		return
+	}
+}
+
+func (app *application) getAllGenres(rw http.ResponseWriter, r *http.Request) {
+	genres, err := app.models.DB.GetAllGenre()
+	if err != nil {
+		app.errorJSON(rw, err)
+		return
+	}
+
+	err = app.writeJSON(rw, http.StatusOK, genres, "genres")
+	if err != nil {
+		app.errorJSON(rw, err)
 		return
 	}
 }

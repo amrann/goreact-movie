@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Detail = ({ movie }) => {
   return (
@@ -11,7 +12,18 @@ const Detail = ({ movie }) => {
 				<small>Rating: {movie.mpaa_rating}</small>
 			</div>
 			<div className='float-end'>
-        <span className='badge bg-secondary me-1'> Action </span>
+				{/* Data genres => "genres":{"3":"Sci-Fi","4":"Adventure"}} */}
+				{/* Data genres berupa OBJECT, sehingga akan diubah menjadi ARRAY dengan menggunakan Object.entries */}
+				{/* genre[0] = id, genre[1] = genre name */}
+				{Object.entries(movie.genres).map((genre, index) => (
+					<Link
+						className='badge bg-secondary me-1'
+						to={`/genres/${genre[0]}/movies`}
+						key={index}
+					>
+						{genre[1]}
+					</Link>
+				))}
 			</div>
 			<div className='clearfix'></div>
 			<hr />

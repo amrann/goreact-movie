@@ -26,7 +26,7 @@ function App() {
             <Routes>
               <Route path='/' element={<Home />} />
               {/* Penggunaan attribut 'exact' dapat memastikan link yang diakses tidak tertukar dengan /movies */}
-              <Route exact path='/movies/:thisId' element={<ShowMovie />} />
+              <Route exact path='/movie/:thisId' element={<ShowMovie />} />
               <Route path='/movies/' element={<Movies />} />
               <Route path='/genres' element={<Genres />} />
               <Route path='/admin' element={<Admin />} />

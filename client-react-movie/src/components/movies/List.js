@@ -57,13 +57,11 @@ const List = () => {
               <div className="card">
                 <div className="card-body">
                   <h5 className="card-title">{movie.title}</h5>
-                  <p className="card-text">
-                    With supporting text below as a natural lead-in to additional content.
-                  </p>
+                  <p className="card-text">{movie.description}</p>
                   {/* <a href="#" className="btn btn-primary">
                     Go somewhere
                   </a> */}
-                  <Link to={`/movies/${movie.id}`} className="btn btn-primary">
+                  <Link to={`/movie/${movie.id}`} className="btn btn-primary">
                     Detail
                   </Link>
                 </div>

@@ -13,7 +13,6 @@ const ShowMovie = () => {
 		const fetchMovies = async () => {
 			try {
 				const result = await axios(`http://localhost:4000/movie/${thisId}`);
-        console.log("data movie => "+result.data.movie);
 				await setMovie(result.data.movie);
 				setLoaded(true);
 			} catch (err) {

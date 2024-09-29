@@ -9,6 +9,7 @@ import Movies from './pages/movies';
 import Genres from './pages/genres';
 import Admin from './pages/admin';
 import ShowMovie from './pages/movies/show';
+import ShowMovieGenre from './pages/genres/show';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route exact path='/movie/:thisId' element={<ShowMovie />} />
               <Route path='/movies/' element={<Movies />} />
               <Route path='/genres' element={<Genres />} />
+              <Route exact path='/genres/:thisId/movies' element={<ShowMovieGenre />} />
               <Route path='/admin' element={<Admin />} />
             </Routes>
           </div>

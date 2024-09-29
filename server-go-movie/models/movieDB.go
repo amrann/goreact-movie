@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 )
 
@@ -67,7 +68,7 @@ func (m *DBModel) GET(id int) (*Movie, error) {
 		if err != nil {
 			return nil, err
 		}
-		genres[mg.ID] = mg.Genre.GenreName
+		genres[mg.GenreID] = mg.Genre.GenreName
 	}
 
 	movie.MovieGenre = genres
@@ -75,18 +76,17 @@ func (m *DBModel) GET(id int) (*Movie, error) {
 	return &movie, nil
 }
 
-func (m *DBModel) All() ([]*Movie, error) {
+func (m *DBModel) All(genre ...int) ([]*Movie, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `SELECT 
-							id, title, description, year, 
-							release_date, runtime, rating, 
-							mpaa_rating, created_at, updated_at 
-						FROM 
-							movies 
-						ORDER BY
-							title`
+	where := ""
+
+	if len(genre) > 0 {
+		where = fmt.Sprintf("WHERE id IN ( SELECT movie_id FROM movies_genres WHERE genre_id = %d)", genre[0])
+	}
+
+	query := fmt.Sprintf("SELECT id, title, description, year, release_date, runtime, rating, mpaa_rating, created_at, updated_at FROM movies %s ORDER BY title", where)
 
 	rows, err := m.DB.QueryContext(ctx, query)
 
@@ -117,7 +117,7 @@ func (m *DBModel) All() ([]*Movie, error) {
 			return nil, err
 		}
 
-		queryQuery := `select
+		genreQuery := `select
 										mg.id, mg.movie_id, mg.genre_id, g.genre_name
 									from
 										movies_genres mg
@@ -125,7 +125,7 @@ func (m *DBModel) All() ([]*Movie, error) {
 									where
 										mg.movie_id = $1`
 
-		genreRows, _ := m.DB.QueryContext(ctx, queryQuery, movie.ID)
+		genreRows, _ := m.DB.QueryContext(ctx, genreQuery, movie.ID)
 		defer genreRows.Close()
 
 		genres := make(map[int]string)
@@ -140,14 +140,12 @@ func (m *DBModel) All() ([]*Movie, error) {
 			if err != nil {
 				return nil, err
 			}
-			genres[mg.ID] = mg.Genre.GenreName
+			genres[mg.GenreID] = mg.Genre.GenreName
 		}
 		genreRows.Close()
 		movie.MovieGenre = genres
 		movies = append(movies, &movie)
-
 	}
-
 	return movies, nil
 }
 

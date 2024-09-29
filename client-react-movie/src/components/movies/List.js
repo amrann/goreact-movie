@@ -5,6 +5,7 @@ import axios from 'axios';
 const List = () => {
   const [movies, setMovies] = useState([])
   const [loaded, setLoaded] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   /* 
   useEffect ini akan bekerja ketika component "List" dipanggil, dengan cttn tidak ada parameter pada param kedua
@@ -20,9 +21,13 @@ const List = () => {
 
     // using axios
     const fetchMovies = async () => {
-      const result = await axios(`http://localhost:4000/movies`);
-      await setMovies(result.data.movies);
-      setLoaded(true);
+      try {
+        const result = await axios(`http://localhost:4000/movies`);
+        await setMovies(result.data.movies);
+        setLoaded(true);
+      } catch (error) {
+        setErrorMessage(error.response.data);
+      }
 		};
 		fetchMovies();
   }, []);
@@ -30,9 +35,21 @@ const List = () => {
   return (
     <>
       {!loaded ? (
-        <div className='row'>
-        <p>Loading...</p>
-      </div>
+        (() => {
+          if (errorMessage) {
+						return (
+							<div className='row'>
+								<p>Oops... {errorMessage}</p>
+							</div>
+						);
+					} else {
+						return (
+							<div className='row'>
+								<p>Loading...</p>
+							</div>
+						);
+					}
+        })()
 			) : (
         <div className="row">
           {movies.map((movie, index) => (

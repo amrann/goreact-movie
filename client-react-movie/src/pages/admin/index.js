@@ -1,9 +1,10 @@
 import React from 'react'
+import MovieTable from '../../components/movies/Table'
 
 const index = () => {
   return (
     <>
-      <h1>Admin page</h1>
+      <MovieTable />
     </>
   )
 }

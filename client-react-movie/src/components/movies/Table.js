@@ -24,9 +24,9 @@ const MovieTable = () => {
     <>
       <div className='row'>
 				<div className='col-12'>
-          <div className='btn btn-sm btn-primary'>
-					  Add
-          </div>
+					<Link to={'/admin/movie/create'} className='btn btn-sm btn-primary'>
+						Add
+					</Link>
 				</div>
 			</div>
       {!loaded ? (

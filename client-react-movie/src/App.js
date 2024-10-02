@@ -10,6 +10,7 @@ import Genres from './pages/genres';
 import Admin from './pages/admin';
 import ShowMovie from './pages/movies/show';
 import ShowMovieGenre from './pages/genres/show';
+import MovieForm from './components/movies/Form';
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
               <Route path='/genres' element={<Genres />} />
               <Route exact path='/genres/:thisId/movies' element={<ShowMovieGenre />} />
               <Route path='/admin' element={<Admin />} />
+              <Route exact path='/admin/movie/create' element={<MovieForm />}
+							/>
             </Routes>
           </div>
         </div>

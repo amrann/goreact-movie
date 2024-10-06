@@ -22,7 +22,11 @@ const MovieForm = () => {
 	const fetchMovie = async (id) => {
 		try {
 			const result = await axios(`http://localhost:4000/movie/${id}`);
-			console.log("fetchMovie result data => "+result.data);
+			/*
+			ID yg didapatkan pada const result masih bertipe number, sedangkan tipe data yg kita set pada
+			MoviePayload berupa string, sehingga harus dikonvert ke string terlebih dahulu
+			*/
+			result.data.movie.id = result.data.movie.id.toString();
 			result.data.movie.release_date = new Date(result.data.movie.release_date)
 				.toISOString()
 				.split('T')[0]; // penyesuaian format Date
@@ -39,8 +43,13 @@ const MovieForm = () => {
 	}, [isAddMode]);
 
 	const onSubmit = async (data) => {
-		const result = await axios.post('http://localhost:4000/admin/movie/add', JSON.stringify(data));
-		console.log("result data => "+result.data)
+		if (isAddMode) {
+			const result = await axios.post('http://localhost:4000/admin/movie/add', JSON.stringify(data));
+			console.log("result add data => "+result.data)
+		} else {
+			const result = await axios.post('http://localhost:4000/admin/movie/edit', JSON.stringify(data));
+			console.log("result edit data => "+result.data)
+		}
 	};
 
 	return (

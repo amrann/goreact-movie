@@ -77,7 +77,9 @@ const MovieTable = () => {
 													<ul className='dropdown-menu'>
 														<li>
 															<span className='dropdown-item'>
-																Edit
+																<Link to={`/admin/movie/${movie.id}/edit`}>
+																	Edit
+																</Link>
 															</span>
 														</li>
 														<li>

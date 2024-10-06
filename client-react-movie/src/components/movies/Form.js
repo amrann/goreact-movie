@@ -1,8 +1,42 @@
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const MovieForm = () => {
 	const { register, handleSubmit, setValue } = useForm();
+	const { thisId } = useParams(); // param thisId disesuaikan dengan param pada route
+	const isAddMode = !thisId;
+	const fields = [
+		'id',
+		'title',
+		'description',
+		'runtime',
+		'release_date',
+		'runtime',
+		'rating',
+		'mpaa_rating',
+		'genres',
+	];
+
+	const fetchMovie = async (id) => {
+		try {
+			const result = await axios(`http://localhost:4000/movie/${id}`);
+			console.log("fetchMovie result data => "+result.data);
+			result.data.movie.release_date = new Date(result.data.movie.release_date)
+				.toISOString()
+				.split('T')[0]; // penyesuaian format Date
+			fields.forEach((field) => setValue(field, result.data.movie[field]));
+		} catch (err) {
+			console.log(err.response.data);
+		}
+	};
+
+	useEffect(() => {
+		if (!isAddMode) {
+			fetchMovie(thisId);
+		}
+	}, [isAddMode]);
 
 	const onSubmit = async (data) => {
 		const result = await axios.post('http://localhost:4000/admin/movie/add', JSON.stringify(data));

@@ -7,16 +7,30 @@ const MovieTable = () => {
 	const [loaded, setLoaded] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const result = await axios(`http://localhost:4000/movies`);
-        await setMovies(result.data.movies);
-        setLoaded(true);
-      } catch (error) {
-        setErrorMessage(error.response.data);
-      }
+	const fetchMovies = async () => {
+		try {
+			const result = await axios(`http://localhost:4000/movies`);
+			if (result.data.movies !== null) {
+				await setMovies(result.data.movies);
+				setLoaded(true);
+			} else {
+				setErrorMessage('nothing data to load');
+			}
+		} catch (err) {
+			setErrorMessage(err.response.data);
+		}
+	};
+
+	const confirmDelete = async (id) => {
+		const payload = {
+			id: id.toString(),
 		};
+		await axios.post('http://localhost:4000/admin/movie/delete', JSON.stringify(payload));
+		setMovies([]);
+		fetchMovies();
+	};
+
+	useEffect(() => {
 		fetchMovies();
   }, []);
 
@@ -83,7 +97,15 @@ const MovieTable = () => {
 															</span>
 														</li>
 														<li>
-															<span className='dropdown-item'>
+														<span
+																className='dropdown-item'
+																style={{ cursor: 'pointer' }}
+																onClick={() => {
+																	if (window.confirm('Are you sure?')) {
+																		confirmDelete(movie.id);
+																	}
+																}}
+															>
 																Delete
 															</span>
 														</li>

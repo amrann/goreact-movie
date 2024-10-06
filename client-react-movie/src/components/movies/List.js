@@ -23,8 +23,12 @@ const List = () => {
     const fetchMovies = async () => {
       try {
         const result = await axios(`http://localhost:4000/movies`);
-        await setMovies(result.data.movies);
-        setLoaded(true);
+        if (result.data.movies !== null) {
+          await setMovies(result.data.movies);
+          setLoaded(true);
+        } else {
+          setErrorMessage('nothing data to load');
+        } 
       } catch (error) {
         setErrorMessage(error.response.data);
       }

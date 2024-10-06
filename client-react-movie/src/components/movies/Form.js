@@ -1,9 +1,10 @@
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const MovieForm = () => {
+	const navigate = useNavigate();
 	const { register, handleSubmit, setValue } = useForm();
 	const { thisId } = useParams(); // param thisId disesuaikan dengan param pada route
 	const isAddMode = !thisId;
@@ -26,7 +27,7 @@ const MovieForm = () => {
 			ID yg didapatkan pada const result masih bertipe number, sedangkan tipe data yg kita set pada
 			MoviePayload berupa string, sehingga harus dikonvert ke string terlebih dahulu
 			*/
-			result.data.movie.id = result.data.movie.id.toString();
+			// result.data.movie.id = result.data.movie.id.toString();
 			result.data.movie.release_date = new Date(result.data.movie.release_date)
 				.toISOString()
 				.split('T')[0]; // penyesuaian format Date
@@ -43,13 +44,22 @@ const MovieForm = () => {
 	}, [isAddMode]);
 
 	const onSubmit = async (data) => {
+		/*
+			sebelum submit, data yang berbentuk object dikonvert menjadi data string
+		*/
+		let dataJSON = JSON.stringify(data, (k, v) =>
+			v && typeof v === 'object' ? v : '' + v
+		);
+		let payload = JSON.parse(dataJSON);
 		if (isAddMode) {
-			const result = await axios.post('http://localhost:4000/admin/movie/add', JSON.stringify(data));
-			console.log("result add data => "+result.data)
+			const result = await axios.post('http://localhost:4000/admin/movie/add', JSON.stringify(payload));
+			console.log("result add data => "+result.payload)
 		} else {
-			const result = await axios.post('http://localhost:4000/admin/movie/edit', JSON.stringify(data));
-			console.log("result edit data => "+result.data)
+			const result = await axios.post('http://localhost:4000/admin/movie/edit', JSON.stringify(payload));
+			console.log("result edit data => "+result.payload)
 		}
+		// resetForm();
+		navigate('/admin');
 	};
 
 	return (
